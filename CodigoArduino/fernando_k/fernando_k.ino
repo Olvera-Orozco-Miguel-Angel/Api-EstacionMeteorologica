@@ -3,9 +3,12 @@
 
 #include <ArduinoWebsockets.h>
 
-char ssid[] = "Totalplay-04A6";
-char password[] = "04A6DBCFCHH7muMQ";
-const char* websockets_server_host = "192.168.100.172"; // IP do servidor websocket
+//char ssid[] = "Totalplay-04A6";
+//char password[] = "04A6DBCFCHH7muMQ";
+char ssid[] = "CCAI_TESE";  // type your wifi name
+char password[] = "TESE_ccai22";  // type your wifi password
+
+const char* websockets_server_host = "192.168.166.103"; // IP do servidor websocket
 const int websockets_server_port = 1010; // Porta de conexão do servidor
 
 // Utilizamos o namespace de websocket para podermos utilizar a classe WebsocketsClient
@@ -15,15 +18,14 @@ using namespace websockets;
 WebsocketsClient client;
 
 // aquí va todo el codigo del sensor
-int UVOUT = 32;    // Pin analógico para la salida del sensor
-int REF_3V3 = 33;  // Pin analógico para la referencia de 3.3V en la placa ESP32
- 
+//int UVOUT = 32;    // Pin analógico para la salida del sensor
+//int REF_3V3 = 33;  // Pin analógico para la referencia de 3.3V en la placa ESP32
+// 
 //aqui termina 
 
 
 void setup() 
 {
-    // Iniciamos a serial com velocidade de 115200
    
 
 
@@ -48,7 +50,7 @@ void setup()
         // Exibimos mensagem de sucesso
         Serial.println("Connected!");
         // Enviamos uma msg "Hello Server" para o servidor
-        client.send("Hello Server");
+        client.send("Hola servidor");
     }   // Se não foi possível conectar
     else 
     {
@@ -61,7 +63,7 @@ void setup()
     client.onMessage([&](WebsocketsMessage message)
     {        
         // Exibimos a mensagem recebida na serial
-        Serial.print("Got Message: ");
+        Serial.print("El mensaje recibido fue ");
         Serial.println(message.data());
 
 //        // Ligamos/Desligamos o led de acordo com o comando
@@ -72,51 +74,51 @@ void setup()
 //                  delay(1000);
     });
 //aqui comienza el codigo del sensor 
-Serial.begin(9600);
-
-  pinMode(UVOUT, INPUT);
-  pinMode(REF_3V3, INPUT);
- 
-  Serial.println("ML8511 example");
+//Serial.begin(9600);
+//
+//  pinMode(UVOUT, INPUT);
+//  pinMode(REF_3V3, INPUT);
+// 
+//  Serial.println("ML8511 example");
     // aquí termina
 }
 void loop() 
 {
-    //  De tempo em tempo, o websockets client checa por novas mensagens recebidas
+    //  De vez en cuando, el cliente websockets comprueba si hay nuevos mensajes entrantes
     if(client.available()) 
         client.poll();
         
     delay(300);
-    // aquí empieza el codigo del sensor 
-     Serial.print("michalngelo");
-  int uvLevel = averageAnalogRead(UVOUT);
-  int refLevel = averageAnalogRead(REF_3V3);
-  
-  // Usar el pin de referencia de 3.3V para obtener un valor de salida muy preciso del sensor
-  float outputVoltage = 3.3 / refLevel * uvLevel;
-  
-  float uvIntensity = mapfloat(outputVoltage, 0.99, 2.8, 0.0, 15.0); // Convertir el voltaje a un nivel de intensidad de UV
- 
-  Serial.print("output: ");
-  Serial.print(refLevel);
- 
-  Serial.print(" / ML8511 output: ");
-  Serial.print(uvLevel);
- 
-  Serial.print(" / ML8511 voltage: ");
-  Serial.print(outputVoltage);
- 
-  Serial.print(" / UV Intensity (mW/cm^2): ");
-  Serial.print(uvIntensity);
-
-  Serial.print(" UV Ray Intensity: ");
-  Serial.print(uvIntensity);
-  Serial.print(" mW/cm^2");
-  
-  Serial.println();
-  
-  delay(2000);
-    // aquí termina
+//    // aquí empieza el codigo del sensor 
+//     Serial.print("michalngelo");
+//  int uvLevel = averageAnalogRead(UVOUT);
+//  int refLevel = averageAnalogRead(REF_3V3);
+//  
+//  // Usar el pin de referencia de 3.3V para obtener un valor de salida muy preciso del sensor
+//  float outputVoltage = 3.3 / refLevel * uvLevel;
+//  
+//  float uvIntensity = mapfloat(outputVoltage, 0.99, 2.8, 0.0, 15.0); // Convertir el voltaje a un nivel de intensidad de UV
+// 
+//  Serial.print("output: ");
+//  Serial.print(refLevel);
+// 
+//  Serial.print(" / ML8511 output: ");
+//  Serial.print(uvLevel);
+// 
+//  Serial.print(" / ML8511 voltage: ");
+//  Serial.print(outputVoltage);
+// 
+//  Serial.print(" / UV Intensity (mW/cm^2): ");
+//  Serial.print(uvIntensity);
+//
+//  Serial.print(" UV Ray Intensity: ");
+//  Serial.print(uvIntensity);
+//  Serial.print(" mW/cm^2");
+//  
+//  Serial.println();
+//  
+//  delay(2000);
+//    // aquí termina
 }
 // Tomar el promedio de lecturas en un pin dado
 // Devuelve el promedio
