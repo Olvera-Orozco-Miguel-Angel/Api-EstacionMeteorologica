@@ -17,6 +17,7 @@ create procedure sp_StoreMeteorologicalData(
 
 	end //
 delimiter ;
+
 call sp_StoreMeteorologicalData(40,40,40,40);
 select * from estacionmeteorologico.weather_measurements;
 create view get_RealTimeData as

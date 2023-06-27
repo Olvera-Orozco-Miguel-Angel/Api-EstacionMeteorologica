@@ -86,6 +86,8 @@ const WebSocket = require("ws");    // Crear un nuevo servidor WebSocket
 
 
  */
+
+// este codigo es el websocket , el que me envia datos desde el ESP32 y aterriza a nodejs
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 
@@ -113,12 +115,16 @@ wsServer.on('request', (request) => {
   //Aceita a conexão do client
   let client = request.accept(null, request.origin);
 
-  //Chamado quando o client envia uma mensagem
+  //Chamado quando o client envia uma mensagem 
   client.on('message', (message) => {
       //Se é uma mensagem string utf8
       if (message.type === 'utf8') {
           //Mostra no console a mensagem
-          console.log(message.utf8Data);
+          //console.log(message.utf8Data);
+          const data = JSON.parse(message.utf8Data);
+          console.log("CONTADOR: ",data.contador,"Temperatura:",data.temperatura,"presion:",data.presion);
+
+
       }
   });
       //Cria uma função que será executada a cada 1 segundo (1000 millis) para enviar o estado do led
@@ -136,3 +142,55 @@ wsServer.on('request', (request) => {
         clearInterval(interval);
     });
 });
+ 
+ 
+
+
+
+/* 
+var WebSocketServer = require('websocket').server;
+var http = require('http');
+
+const port = 9011;
+
+var server = http.createServer();
+server.listen(port, () => {
+  console.log(`Server está ejecutándose en el puerto ${port}`);
+});
+
+wsServer = new WebSocketServer({
+  httpServer: server
+});
+
+wsServer.on('request', (request) => {
+  let client = request.accept(null, request.origin);
+
+  client.on('message', (message) => {
+    if (message.type === 'utf8') {
+      console.log(message.utf8Data);
+    }
+  });
+
+  client.on('close', () => {
+    console.log("Conexión cerrada");
+  });
+}); */
+
+
+/*
+este codigo es para probar el servidor de socket.io
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 9011 });
+
+wss.on('connection', (ws) => {
+  console.log('Cliente conectado');
+
+  ws.on('message', (message) => {
+    console.log('Mensaje recibido:', message);
+  });
+
+  ws.on('close', () => {
+    console.log('Cliente desconectado');
+  });
+});
+*/
