@@ -4,7 +4,7 @@ export default {
     host:process.env.HOST || "localhost",
     database:process.env.DATABASE || "EstacionMeteorologico",
     user:process.env.USER || "root",
-    password:process.env.PASSWORD || "mysqlMAO97"
+    password:process.env.PASSWORD || ""
 
 
 }

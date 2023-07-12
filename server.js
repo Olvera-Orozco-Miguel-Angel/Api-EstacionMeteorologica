@@ -79,12 +79,6 @@ const WebSocket = require("ws");    // Crear un nuevo servidor WebSocket
             console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
         });
     });
-
-
-
-
-
-
  */
 var WebSocketServer = require('websocket').server;
 var http = require('http');
@@ -93,16 +87,16 @@ var http = require('http');
 const port = 1010;
 
 //Cria o server
-var server = http.createServer();
+var serverEsp32 = http.createServer();
 //Server irá escutar na porta definida em 'port'
-server.listen(port, () => {
+serverEsp32.listen(port, () => {
     //Server está pronto
     console.log(`Server está executando na porta ${port}`);
 });
 
 //Cria o WebSocket server
 wsServer = new WebSocketServer({
-  httpServer: server
+  httpServer: serverEsp32
 });
 
 //Chamado quando um client deseja conectar
@@ -136,3 +130,41 @@ wsServer.on('request', (request) => {
         clearInterval(interval);
     });
 });
+
+
+// aquí esta el codigo de socket.io que conecta con angular 
+const express = require('express')
+const app = express()
+const server = require('http').createServer(app);
+const io = require('socket.io')(server)
+
+io.on('connection', socket=>{
+   // all socket events here
+   console.log('Un cliente se ha conectado');
+
+  // Manejo de eventos del cliente
+  socket.on('message', (data) => {
+    console.log('Mensaje recibido:', data);
+    // Emitir un evento a todos los clientes conectados
+    
+  });
+ var data = "hola, soy el servidor";
+  io.emit('message', "así que no llego nada he");
+  // Manejo de desconexión del cliente
+  socket.on('disconnect', () => { 
+    console.log('Cliente desconectado');
+  });
+
+});
+
+// Magic Lines
+server.prependListener("request", (req, res) => {
+   res.setHeader("Access-Control-Allow-Origin", "*");
+});
+
+
+// instead of "*" your can also add the other domain/servername
+server.listen(7000, () => {
+   console.log("This is the socket server running");
+});
+
