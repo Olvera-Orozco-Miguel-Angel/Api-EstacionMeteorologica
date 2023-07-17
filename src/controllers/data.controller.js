@@ -1,6 +1,5 @@
 import {getConnection} from "./../database/database";
-
-
+import {app} from "../app";
 const getRealTimeData = async(req,res) =>{
 
     try{
@@ -15,8 +14,8 @@ const getRealTimeData = async(req,res) =>{
     
    
 }
-// controlador para insertar datos 
-const insertData = async(req,res)=>{
+// controlador para insertar la información  que manda el ESP32 cada media hora en la base de datos y que también se manda al cliente
+const insertDataFromESP32 = async(req,res)=>{
     const { 
          temperature,
          pressure, 
@@ -30,14 +29,38 @@ const insertData = async(req,res)=>{
         const connection = await getConnection();
         const result = await connection.query(`call sp_StoreMeteorologicalData('${temperature}','${pressure}','${altitud}','${air_quality}')`);
         res.status(200).json({status:"Well done!", message:"Datos registrados con exito"});
-
+        const io = req.app.get('socketio');
+        io.emit("reciveRealData", req.body);
        
     }catch(error){
         console.log(error);
         res.status(500).json(error.message);
     }
 }
+
+const showDataFromESP32 = async(req,res)=>{
+    const { 
+       temperature,
+       pressure, 
+       altitud, 
+       air_quality
+       
+      } = req.body;
+    
+  try{
+      
+   
+      res.status(200).json({status:"Well done!", message:"Datos registrados con exito"});
+    io.emit('reciveRealData',req.body);
+     
+  }catch(error){
+      console.log(error);
+      res.status(500).json(error.message);
+  }
+  }
+
 export const methods = {
     getRealTimeData,
-    insertData
+    insertDataFromESP32,
+    showDataFromESP32
 };
