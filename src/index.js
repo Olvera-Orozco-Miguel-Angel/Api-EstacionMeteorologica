@@ -1,8 +1,11 @@
 
-import {app} from "./app";
+//import {http} from "./app";
+import { app, http } from "./app";
 
 const main = () => {
-    console.log("me ejecute despues")
+    http.listen(app.get('port'), () => {
+        console.log("This is the socket server running at port ",app.get('port'));
+      });
 }
 main();
 

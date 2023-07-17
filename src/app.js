@@ -30,9 +30,7 @@ http.prependListener("request", (req, res) => {
 
 // las rutas
 app.use(realtimeRoute);
-http.listen(app.get('port'), () => {
-  console.log("This is the socket server running at port ",app.get('port'));
-});
+
 
 
 /*  global.io.on("connection",socket=>{
@@ -48,7 +46,6 @@ http.listen(app.get('port'), () => {
 // exportación de app
 app.set('socketio', io);
 
-console.log("me ejecute primero");
-export default app;
+module.exports = { app, http };
 
 
